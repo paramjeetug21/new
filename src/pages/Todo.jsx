@@ -7,9 +7,8 @@ export const Todo = () => {
   const [task, setTask] = useState("");
   const [todos, setTodos] = useState([]);
   const [userName, setUserName] = useState("");
-
+  const token = localStorage.getItem("token");
   useEffect(() => {
-    const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
       return;
@@ -19,7 +18,7 @@ export const Todo = () => {
       setTodos(user.todos || []);
       setUserName(user.name);
     }
-  }, [token, navigate]);
+  }, [navigate]);
 
   // Add new todo
   const handleAddTodo = async (e) => {
@@ -27,7 +26,7 @@ export const Todo = () => {
     if (!task.trim()) return alert("Please enter a task!");
 
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
 
       const res = await axios.post(
         "http://localhost:3000/task/add",
@@ -49,34 +48,10 @@ export const Todo = () => {
     }
   };
 
-  const handleToggleComplete = async (id, currentStatus) => {
-    try {
-      const res = await axios.patch(
-        "http://localhost:3000/task/${id}",
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      const updatedTodo = res.data.task;
-      const newTodos = todos.map((todo) =>
-        todo.id === updatedTodo.id ? updatedTodo : todo
-      );
-      setTodos(newTodos);
-
-      const user = JSON.parse(localStorage.getItem("user"));
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ ...user, todos: newTodos })
-      );
-    } catch (err) {
-      console.error(err.response?.data || err.message);
-    }
-  };
-
   const handleDelete = async (id) => {
     try {
       await axios.patch(
-        "http://localhost:3000/task/${id}",
+        `http://localhost:3000/task/${id}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -140,14 +115,7 @@ export const Todo = () => {
                     key={todo.id}
                     className="p-4 rounded-lg flex justify-between items-center cursor-pointer transition-all bg-purple-800 hover:bg-purple-700 text-white"
                   >
-                    <span
-                      onClick={() =>
-                        handleToggleComplete(todo.id, todo.todoDone)
-                      }
-                      className="flex-grow"
-                    >
-                      {todo.title}
-                    </span>
+                    <span className="flex-grow">{todo.title}</span>
                     <button
                       onClick={() => handleDelete(todo.id)}
                       className="ml-4 text-red-500 hover:text-red-700 font-bold"
