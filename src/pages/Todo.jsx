@@ -8,11 +8,12 @@ export const Todo = () => {
   const [todos, setTodos] = useState([]);
   const [userName, setUserName] = useState("");
 
-  const token = localStorage.getItem("token");
-  if (!token) {
-    return navigate("/login");
-  }
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       setTodos(user.todos || []);
