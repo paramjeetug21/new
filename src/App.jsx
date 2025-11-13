@@ -1,10 +1,25 @@
-import { useState } from "react";
-import "./App.css";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Login } from "./pages/Login";
+import { Todo } from "./pages/Todo";
+import { Signup } from "./pages/Signup";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Todo />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
+  },
+]);
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return <h1>Hello paramjeet</h1>;
+  return <RouterProvider router={router} />;
 }
 
 export default App;
