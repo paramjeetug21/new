@@ -29,7 +29,7 @@ export const Todo = () => {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
 
       const res = await axios.post(
-        "https://todo-backend-z2a4-git-main-paramjeetug21s-projects.vercel.app/task/add",
+        "https://todo-backend-z2a4-k6c53uwl6-paramjeetug21s-projects.vercel.app/task/add",
         { title: task, userId: user.id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -51,7 +51,7 @@ export const Todo = () => {
   const handleDelete = async (id) => {
     try {
       await axios.patch(
-        `https://todo-backend-z2a4-git-main-paramjeetug21s-projects.vercel.app/task/${id}`,
+        `https://todo-backend-z2a4-k6c53uwl6-paramjeetug21s-projects.vercel.app/task/${id}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
